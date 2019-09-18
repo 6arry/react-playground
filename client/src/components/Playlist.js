@@ -1,42 +1,31 @@
 import React, { Component } from 'react';
 import { Container, ListGroup, ListGroupItem, Button } from 'reactstrap';
 import {CSSTransition, TransitionGroup } from 'react-transition-group';
-import uuid from 'uuid';
+import { connect } from 'react-redux';
+import { getSongs, deleteSong } from '../actions/songActions';
+import PropTypes from 'prop-types'
 
 class Playlist extends Component {
-    state = {
-        songs: [
-            { id: uuid(), name: 'Timezones' },
-            { id: uuid(), name: 'Miss Me?' },
-            { id: uuid(), name: 'Youth Water' },
-            { id: uuid(), name: 'Silver Skies' },
-        ]
+
+    componentDidMount() {
+        this.props.getSongs();
+    }
+
+    onDeleteClick =(id) => {
+        this.props.deleteSong(id)
     }
 
     render() {
-        const { songs } = this.state;
+        const { songs } = this.props.song;
         return(
             <Container>
-                <Button color="dark" style={{margonBottom: '2rem'}} onClick={() => {
-                    const name = prompt('Enter Song');
-                    if(name) {
-                        this.setState(state => ({
-                            songs: [...state.songs, { id: uuid(), name}]
-                        }));
-                    }
-                }}>Add Song</Button>
-
                 <ListGroup>
                     <TransitionGroup className="playlist">
                         {songs.map(({id, name}) => (
                             <CSSTransition key={id} timeout={500} classNames="fade">
                                 <ListGroupItem>
                                     <Button className="remove-btn" color="danger" size="sm"
-                                        onClick={() => {
-                                            this.setState(state => ({
-                                                songs: state.songs.filter(song => song.id !== id)
-                                            }));
-                                        }}>&times;</Button>
+                                        onClick={this.onDeleteClick.bind(this, id)}>&times;</Button>
                                     {name}
                                 </ListGroupItem>
                             </CSSTransition>
@@ -48,4 +37,12 @@ class Playlist extends Component {
     }
 }
 
-export default Playlist;
+Playlist.propTypes = {
+    getSongs: PropTypes.func.isRequired,
+    song: PropTypes.object.isRequired
+}
+
+const mapStateToProps = (state) => ({
+    song: state.song
+})
+export default connect(mapStateToProps, { getSongs, deleteSong })(Playlist);
