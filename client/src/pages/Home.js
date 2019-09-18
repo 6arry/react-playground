@@ -1,6 +1,7 @@
 import React from 'react';
 import '../App.css';
 import '../components/Ytsearch';
+import Playlist from '../components/Playlist'
 import SearchBar from '../components/SearchBar';
 import Ytplayer from '../components/Ytplayer';
 import { Animated } from 'react-animated-css';
@@ -49,13 +50,14 @@ class Home extends React.Component {
           updateSearchTerm={this.updateSearchTerm}
           ytSearch={this.ytSearch}
         />
+        <Playlist />
         <Animated
           animationIn='bounceInLeft'
           animationOut='fadeOut'
           isVisible={true}>
           <div>
             hello world
-            <h1>This is the Host page!</h1>
+            <h1>This is the Dashboard page!</h1>
           </div>
         </Animated>
         <Ytplayer />
