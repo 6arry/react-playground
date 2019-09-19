@@ -6,6 +6,11 @@ import { getSongs, deleteSong } from '../actions/songActions';
 import PropTypes from 'prop-types'
 
 class Playlist extends Component {
+    static propTypes = {
+        getSongs: PropTypes.func.isRequired,
+        song: PropTypes.object.isRequired,
+        isAuthenticated: PropTypes.bool
+    }
 
     componentDidMount() {
         this.props.getSongs();
@@ -19,30 +24,31 @@ class Playlist extends Component {
         const { songs } = this.props.song;
         return(
             <Container>
-                <ListGroup>
-                    <TransitionGroup className="playlist">
-                        {songs.map(({ _id, name}) => (
-                            <CSSTransition key={_id} timeout={500} classNames="fade">
-                                <ListGroupItem>
-                                    <Button className="remove-btn" color="danger" size="sm"
-                                        onClick={this.onDeleteClick.bind(this, _id)}>&times;</Button>
-                                    {name}
-                                </ListGroupItem>
-                            </CSSTransition>
-                        ))}
-                    </TransitionGroup>
-                </ListGroup>
+                { this.props.isAuthenticated ? (
+                    <ListGroup>
+                        <TransitionGroup className="playlist">
+                                {songs.map(({ _id, name}) => (
+                                    <CSSTransition key={_id} timeout={500} classNames="fade">
+                                        <ListGroupItem>
+                                            <Button className="remove-btn" color="danger" size="sm"
+                                                onClick={this.onDeleteClick.bind(this, _id)}>&times;</Button>
+                                            {name}
+                                        </ListGroupItem>
+                                    </CSSTransition>
+                                ))}
+                        </TransitionGroup>
+                    </ListGroup>
+                ) : null}
             </Container>
         );
     }
 }
 
-Playlist.propTypes = {
-    getSongs: PropTypes.func.isRequired,
-    song: PropTypes.object.isRequired
-}
-
 const mapStateToProps = (state) => ({
-    song: state.song
+    song: state.song,
+    isAuthenticated: state.auth.isAuthenticated
 })
-export default connect(mapStateToProps, { getSongs, deleteSong })(Playlist);
+export default connect(
+    mapStateToProps, 
+    { getSongs, deleteSong }
+)(Playlist);

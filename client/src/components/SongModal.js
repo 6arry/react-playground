@@ -11,11 +11,16 @@ import {
 } from 'reactstrap';
 import { connect } from  'react-redux';
 import { addSong } from '../actions/songActions';
+import PropTypes from 'prop-types';
 
 class SongModal extends Component {
     state = {
         modal: false,
         name: ''
+    }
+
+    static propTypes = {
+        isAuthenticated: PropTypes.bool
     }
 
     toggle = () => {
@@ -43,11 +48,12 @@ class SongModal extends Component {
     render() {
         return(
             <div>
-                <Button
+                { this.props.isAuthenticated ? (<Button
                     color="dark"
                     style={{marginBottom: '2rem'}}
                     onClick={this.toggle}
-                >Add Song</Button>
+                >Add Song</Button>) : (<h4 className="mb-3 ml-4">Please login to join the party</h4>)}
+
 
                 <Modal
                     isOpen={this.state.modal}
@@ -70,7 +76,11 @@ class SongModal extends Component {
 }
 
 const mapStateToProps = state => ({
-    song: state.song
+    song: state.song,
+    isAuthenticated: state.auth.isAuthenticated
 })
 
-export default connect(mapStateToProps, { addSong })(SongModal);
+export default connect(
+    mapStateToProps, 
+    { addSong }
+)(SongModal);
