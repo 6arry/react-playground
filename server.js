@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const path =require('path');
 
-const songs = require('./routes/api/songs');
+const songs = require('./routes/api/Songs.js')
 
 const app = express();
 
