@@ -13,15 +13,15 @@ import {
 } from 'reactstrap';
 import { connect } from  'react-redux';
 import PropTypes from 'prop-types';
-import { register } from '../actions/authActions';
-import { clearErrors } from '../actions/errorActions';
+import { register } from '../../actions/authActions';
+import { clearErrors } from '../../actions/errorActions';
 
 class RegisterModal extends Component {
     state = {
         modal: false,
         name: '',
         email: '',
-        passwrod: '',
+        password: '',
         msg: null
     };
 
